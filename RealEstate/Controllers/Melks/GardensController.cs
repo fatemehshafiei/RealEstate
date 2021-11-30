@@ -53,6 +53,16 @@ namespace RealEstate.Controllers.Melks
             _context.Remove(garden);
         }
 
+        [HttpPut("{id}")]
+        public void Update(int id,UpdateGardenDto dto)
+        {
+            var garden = _gardens.FirstOrDefault(_ => _.Id==id);
+            GardenNotFound(garden);
+            garden.Title = dto.Title;
+            garden.Price = dto.Price;
+            garden.Detail = dto.Detail;
+            _context.SaveChanges();
+        }
         private static void GardenNotFound(Garden garden)
         {
             if (garden == null)
