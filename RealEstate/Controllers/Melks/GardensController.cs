@@ -23,6 +23,7 @@ namespace RealEstate.Controllers.Melks
             _context = new EFDataContext();
             _gardens = _context.Gardens;
         }
+
         [HttpPost]
         public void Add([FromBody] AddGardenDto dto)
         {
@@ -54,7 +55,7 @@ namespace RealEstate.Controllers.Melks
         }
 
         [HttpPut("{id}")]
-        public void Update(int id,UpdateGardenDto dto)
+        public void Update(int id, UpdateGardenDto dto)
         {
             var garden = _gardens.FirstOrDefault(_ => _.Id==id);
             GardenNotFound(garden);
