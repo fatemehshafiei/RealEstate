@@ -30,6 +30,37 @@ namespace RealEstate.Controllers.Melks
             _context.SaveChanges();
         }
 
+      
+        [HttpGet]
+        public List<GetGardenDto> GetAll()
+        {
+            return _gardens.Where(_=>_.IsDeleted==false).Select(_ => new GetGardenDto
+            {
+                Id = _.Id,
+                Title = _.Title,
+                Price = _.Price,
+                Address = new AddAdressDto { Title = _.Address.Title, Latitude = _.Address.Latitude, Longitude = _.Address.Longitude },
+                CreateDate = _.CreateDate
+            }).ToList();
+        }
+
+
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            var garden = _gardens.FirstOrDefault(_ => _.Id == id);
+            GardenNotFound(garden);
+            _context.Remove(garden);
+        }
+
+        private static void GardenNotFound(Garden garden)
+        {
+            if (garden == null)
+            {
+                throw new Exception("Garden Not Found");
+            }
+        }
+
         private static Garden AddGarden(AddGardenDto dto)
         {
             var garden = new Garden
@@ -48,18 +79,6 @@ namespace RealEstate.Controllers.Melks
                 IsActive = dto.IsActive
             };
             return garden;
-        }
-        [HttpGet]
-        public List<GetGardenDto> GetAll()
-        {
-            return _gardens.Where(_=>_.IsDeleted==false).Select(_ => new GetGardenDto
-            {
-                Id = _.Id,
-                Title = _.Title,
-                Price = _.Price,
-                Address = new AddAdressDto { Title = _.Address.Title, Latitude = _.Address.Latitude, Longitude = _.Address.Longitude },
-                CreateDate = _.CreateDate
-            }).ToList();
         }
     }
 }
